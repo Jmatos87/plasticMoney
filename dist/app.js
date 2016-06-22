@@ -19696,17 +19696,68 @@ module.exports = require('./lib/React');
 var React = require('react'),
     ReactDOM = require('react-dom');
 
+var formatInput = function formatInput(inputString) {
+	// split on non-digit characters
+	// join
+	var formatted = inputString.split(/\s|-/).join('');
+	return formatted;
+};
+var validateRawInput = function validateRawInput(formattedString) {
+	// check for invalid characters
+	var invalidChars = formattedString.match(/\D/g);
+	if (!invalidChars) {
+		return true;
+	}
+	return false;
+};
+var validateCardNumber = function validateCardNumber(formattedString) {
+	var visa = formattedString.match(/^4[0-9]{15}/);
+	var amex = formattedString.match(/^3[47][0-9]{13}/);
+	var masterCard = formattedString.match(/^5[1-5][0-9]{14}/);
+
+	if (visa) {
+		return 'visa';
+	} else if (amex) {
+		return 'amex';
+	} else if (masterCard) {
+		return 'masterCard';
+	} else return 'invalid card :(';
+};
+
 var app = function app() {
 
-	var Header = React.createClass({
-		displayName: 'Header',
+	var Container = React.createClass({
+		displayName: 'Container',
+
+		cardValidator: function cardValidator() {
+			var userInput = this.state.userInput;
+			var formattedString = formatInput(userInput);
+			var booleanValidation = validateRawInput(formattedString);
+
+			if (booleanValidation) {
+				var number = parseInt(formattedString);
+				var issuer = validateCardNumber(formattedString);
+
+				if (issuer !== 'invalid card :(') {
+					localStorage.setItem(issuer, number);
+					alert('Congratulations! Your credit card number has been saved!');
+				} else alert("Sorry we don't accept that credit card provider.");
+			} else alert('Please input a valid credit card number');
+		},
+
+		userEntry: function userEntry() {
+			var input = document.querySelector('input');
+			this.setState({
+				userInput: input.value
+			});
+		},
 
 		render: function render() {
-			return React.createElement('h1', null, 'YOLO');
+			return React.createElement('div', { id: 'container' }, React.createElement('h1', null, 'Safety Net'), React.createElement('h3', null, ' This is a very legit app with tons of encryption so you can submit your credit card number with confidence! '), React.createElement('img', { src: 'https://avatars0.githubusercontent.com/u/16376264?v=3&s=460' }), React.createElement('input', { type: 'text', placeholder: 'Type your credit card number here', onKeyUp: this.userEntry }), React.createElement('div', { id: 'button', onClick: this.cardValidator }, 'Submit'));
 		}
 	});
 
-	ReactDOM.render(React.createElement(Header, null), document.querySelector('.container'));
+	ReactDOM.render(React.createElement(Container, null), document.querySelector('.container'));
 };
 
 app();
