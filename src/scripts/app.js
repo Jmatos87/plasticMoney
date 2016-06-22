@@ -16,9 +16,9 @@ const validateRawInput = function (formattedString){
 	return false;
 }
 const validateCardNumber = function(formattedString) {
-	const visa = formattedString.match(/^4[0-9]{15}/)
-	const amex = formattedString.match(/^3[47][0-9]{13}/)
-	const masterCard = formattedString.match(/^5[1-5][0-9]{14}/)
+	const visa = formattedString.match(/^4[0-9]{15}\b/)
+	const amex = formattedString.match(/^3[47][0-9]{13}\b/)
+	const masterCard = formattedString.match(/^5[1-5][0-9]{14}\b/)
 
 	if(visa){
 		return 'visa'

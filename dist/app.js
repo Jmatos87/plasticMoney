@@ -19711,9 +19711,9 @@ var validateRawInput = function validateRawInput(formattedString) {
 	return false;
 };
 var validateCardNumber = function validateCardNumber(formattedString) {
-	var visa = formattedString.match(/^4[0-9]{15}/);
-	var amex = formattedString.match(/^3[47][0-9]{13}/);
-	var masterCard = formattedString.match(/^5[1-5][0-9]{14}/);
+	var visa = formattedString.match(/^4[0-9]{15}\b/);
+	var amex = formattedString.match(/^3[47][0-9]{13}\b/);
+	var masterCard = formattedString.match(/^5[1-5][0-9]{14}\b/);
 
 	if (visa) {
 		return 'visa';
