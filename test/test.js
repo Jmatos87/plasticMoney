@@ -19,9 +19,9 @@ const validateRawInput = function (formattedString){
 }
 
 const validateCardNumber = function(formattedString) {
-	const visa = formattedString.match(/^4[0-9]{15}/)
-	const amex = formattedString.match(/^3[47][0-9]{13}/)
-	const masterCard = formattedString.match(/^5[1-5][0-9]{14}/)
+	const visa = formattedString.match(/^4[0-9]{15}\b/)
+	const amex = formattedString.match(/^3[47][0-9]{13}\b/)
+	const masterCard = formattedString.match(/^5[1-5][0-9]{14}\b/)
 
 	if(visa){
 		return 'visa'
@@ -82,17 +82,22 @@ describe('credit card validation', function() {
 
 	it('should point out an invalid card number with an undesired string', function() {
 		//This card number is one character too short
-		var badCardNumberLength = '411111111111111';
+		var badCardNumberLengthShort = '411111111111111';
 		//This card number has a leading number that wouldn't belong to any issuer
-		var badCardNumber = '1234567890123456'
+		var badCardNumber = '1234567890123456';
+		//This card number is one character too long
+		var badCardNumberLengthLong = '41111111111111111';
 
-		var issuer = validateCardNumber(badCardNumberLength);
-		var issure2 = validateCardNumber(badCardNumber)
+
+
+		var issuer = validateCardNumber(badCardNumberLengthShort);
+		var issure2 = validateCardNumber(badCardNumber);
+		var issuer3 = validateCardNumber(badCardNumberLengthLong)
 
 		expect(issuer).to.equal('invalid card :('); 
-		expect(issure2).to.equal('invalid card :(')
+		expect(issure2).to.equal('invalid card :(');
+		expect(issuer3).to.equal('invalid card :(')
 	})
 })
 
-
-
+//Thank you for the opportunity!
